@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "<GIT_REPO_URL>"
+    repoURL: repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
     targetRevision: main
     path: "apps"
   destination:
