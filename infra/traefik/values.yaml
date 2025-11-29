@@ -1,0 +1,12 @@
+image:
+  name: traefik
+  tag: v3.6.2
+
+ports:
+  web:
+    expose: true
+  websecure:
+    expose: true
+
+service:
+  type: LoadBalancer

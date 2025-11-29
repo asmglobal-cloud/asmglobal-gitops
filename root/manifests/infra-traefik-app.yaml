@@ -8,7 +8,10 @@ spec:
   source:
     repoURL: https://github.com/asmglobal-cloud/asmglobal-gitops.git
     targetRevision: main
-    path: apps/infra-traefik
+    path: infra/traefik
+    helm:
+      valueFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: traefik
@@ -17,4 +20,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true
