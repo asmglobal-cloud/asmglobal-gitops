@@ -2,17 +2,21 @@ image:
   name: traefik
   tag: v3.6.2
 
+service:
+  type: LoadBalancer
+
 ports:
   web:
     expose: true
   websecure:
     expose: true
 
-service:
-  type: LoadBalancer
-
 providers:
   kubernetesCRD:
     enabled: true
   kubernetesIngress:
+    enabled: true
+
+ingressRoute:
+  dashboard:
     enabled: true
