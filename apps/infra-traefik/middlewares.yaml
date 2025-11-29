@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+  namespace: traefik
+spec:
+  headers:
+    frameDeny: true
+    sslRedirect: true
+    contentTypeNosniff: true
+    browserXssFilter: true
+    referrerPolicy: no-referrer
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: gzip-compress
+  namespace: traefik
+spec:
+  compress: {}

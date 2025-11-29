@@ -1,0 +1,3 @@
+resources:
+  - middlewares.yaml
+  - traefik-dashboard.yaml
