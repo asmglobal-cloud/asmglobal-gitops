@@ -11,14 +11,8 @@ ports:
 service:
   type: LoadBalancer
 
-pilot:
-  enabled: false
-
 providers:
   kubernetesCRD:
     enabled: true
   kubernetesIngress:
     enabled: true
-
-globalArguments:
-  - "--api.insecure=true"   # optional to view dashboard until ingress works
