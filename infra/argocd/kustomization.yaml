@@ -5,3 +5,8 @@ namespace: argocd
 
 resources:
   - repo-server-network.yaml
+  - repo-server-egress.yaml
+
+patchesStrategicMerge:
+  - repo-server-network.yaml
+
