@@ -3,10 +3,10 @@ kind: Kustomization
 
 namespace: argocd
 
+# list resources you *want to apply* (e.g. networkpolicy file)
 resources:
-  - repo-server-network.yaml
   - repo-server-egress.yaml
 
+# only reference the patch here — do NOT list repo-server-network.yaml under resources
 patchesStrategicMerge:
   - repo-server-network.yaml
-
