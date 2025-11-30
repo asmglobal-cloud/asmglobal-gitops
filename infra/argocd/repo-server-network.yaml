@@ -2,13 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: argocd-repo-server
-  namespace: argocd
 spec:
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: argocd-repo-server
+        app.kubernetes.io/part-of: argocd
     spec:
       containers:
-        - name: argocd-repo-server
-          securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
+      - name: argocd-repo-server
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
