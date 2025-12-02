@@ -3,13 +3,15 @@ kind: Kustomization
 
 namespace: traefik
 
-resources:
-  - middleware-dashboard-auth.yaml
-  - dashboard-ingressroute.yaml
-
+# 1) Install Traefik Helm chart FIRST (creates CRDs)
 helmCharts:
   - name: traefik
     repo: https://traefik.github.io/charts
     version: 23.1.0
     releaseName: traefik
     valuesFile: values.yaml
+
+# 2) Apply our custom resources AFTER the chart is installed
+resources:
+  - middleware-dashboard-auth.yaml
+  - dashboard-ingressroute.yaml
