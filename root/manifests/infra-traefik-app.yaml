@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
     targetRevision: main
-    path: infra/traefik
+    path: infra/traefik/overlays/production
   destination:
     server: https://kubernetes.default.svc
     namespace: traefik
