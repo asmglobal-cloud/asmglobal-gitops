@@ -1,0 +1,28 @@
+# Production overrides for Traefik
+
+# Use the base values from ../../base and only override what is needed
+additionalArguments:
+  - "--api.dashboard=true"
+  - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+  - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+  - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
+  - "--certificatesresolvers.hostinger.acme.email=admin@asmglobal.cloud"
+  - "--certificatesresolvers.hostinger.acme.storage=/data/acme.json"
+  - "--certificatesresolvers.hostinger.acme.dnschallenge.provider=hostinger"
+
+env:
+  - name: HST_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: hostinger-dns-api
+        key: HST_API_TOKEN
+
+persistence:
+  enabled: false
+
+service:
+  type: LoadBalancer
+
+ingressRoute:
+  dashboard:
+    enabled: false

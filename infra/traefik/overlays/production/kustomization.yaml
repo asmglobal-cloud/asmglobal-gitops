@@ -7,3 +7,10 @@ resources:
   - dashboard-ingressroute.yaml
   - hostinger-secret.yaml
   - dashboard-auth-secret.yaml
+
+helmCharts:
+  - name: traefik
+    repo: https://traefik.github.io/charts
+    version: 23.1.0
+    releaseName: traefik
+    valuesFile: values.yaml
