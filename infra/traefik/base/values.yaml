@@ -1,7 +1,12 @@
 # ==============================
-# TRAEFIK HELM VALUES (BASE)
+# TRAEFIK HELM VALUES
 # ==============================
 
+# Enable CRDs (we already installed them but Helm will verify)
+experimental:
+  kubernetesCRD: true
+
+# Dashboard
 ports:
   web:
     port: 80

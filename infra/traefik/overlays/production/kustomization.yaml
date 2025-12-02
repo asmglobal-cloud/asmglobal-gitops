@@ -12,13 +12,6 @@ helmCharts:
     repo: https://traefik.github.io/charts
     version: 23.1.0
     releaseName: traefik
-    namespace: traefik
-    valuesFile: ../../base/values.yaml
-
-  - name: traefik
-    repo: https://traefik.github.io/charts
-    version: 23.1.0
-    releaseName: traefik
-    namespace: traefik
-    valuesFile: values-production.yaml
-
+    valuesFiles:
+      - ../../base/values.yaml
+      - values-production.yaml
