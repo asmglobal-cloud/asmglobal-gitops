@@ -53,8 +53,8 @@ logs:
 
 # Persistence for ACME (so certs survive restarts/upgrades)
 persistence:
-  enabled: true
-  path: /data
+  enabled: false
+  
 
 # Certificates resolver using Hostinger DNS challenge (uses provider 'hostinger' from the chart)
 certificatesResolvers:
