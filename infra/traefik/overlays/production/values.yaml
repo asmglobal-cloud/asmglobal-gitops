@@ -1,0 +1,76 @@
+# ==============================
+# TRAEFIK HELM VALUES (base)
+# ==============================
+
+# Enable CRDs
+experimental:
+  kubernetesCRD: true
+
+# Dashboard ports
+ports:
+  web:
+    port: 80
+    expose: true
+    exposedPort: 80
+
+  websecure:
+    port: 443
+    expose: true
+    exposedPort: 443
+
+  traefik:
+    port: 8080
+    expose: true
+    exposedPort: 8080
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+service:
+  type: LoadBalancer
+  annotations: {}
+
+# Enable access logs
+accessLogs:
+  enabled: true
+
+# Traefik args / dashboard
+globalArguments:
+  - "--api.dashboard=true"
+  - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+  - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+  - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
+additionalArguments:
+  - "--api.insecure=false"
+  - "--serversTransport.insecureSkipVerify=true"
+
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+
+# Persistence for ACME (so certs survive restarts/upgrades)
+persistence:
+  enabled: false
+  
+
+# Certificates resolver using Hostinger DNS challenge (uses provider 'hostinger' from the chart)
+certificatesResolvers:
+  hostinger:
+    acme:
+      email: "admin@asmglobal.cloud"
+      storage: /data/acme.json
+      dnsChallenge:
+        provider: hostinger
+        delayBeforeCheck: 0
+
+# Reference Hostinger API token via Kubernetes Secret (DO NOT put real token here)
+# The chart may expect env or extraEnv depending on chart version; using env block works for standard charts.
+env:
+  - name: HST_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: hostinger-dns-api
+        key: HST_API_TOKEN
