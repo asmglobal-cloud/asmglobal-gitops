@@ -2,16 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: argocd-repo-server
+  namespace: argocd
 spec:
+  # Ensure selector matches the template labels in the base manifest
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-repo-server
   template:
     metadata:
       labels:
         app.kubernetes.io/name: argocd-repo-server
-        app.kubernetes.io/part-of: argocd
+  template:
     spec:
       containers:
       - name: argocd-repo-server
         securityContext:
+          allowPrivilegeEscalation: false
           capabilities:
             add:
               - NET_ADMIN

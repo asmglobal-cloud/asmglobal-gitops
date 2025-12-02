@@ -8,5 +8,4 @@ helmCharts:
     repo: https://traefik.github.io/charts
     version: 23.1.0
     releaseName: traefik
-    valuesFiles:
-      - values.yaml
+    valuesFile: values.yaml
