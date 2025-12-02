@@ -6,17 +6,12 @@ resources:
   - middleware-dashboard-auth.yaml
   - dashboard-ingressroute.yaml
   - dashboard-auth-secret.yaml
-  - hostinger-secret.yaml
 
 helmCharts:
   - name: traefik
     repo: https://traefik.github.io/charts
     version: 23.1.0
     releaseName: traefik
-    valuesFile: values-base.yaml
-
-  - name: traefik
-    repo: https://traefik.github.io/charts
-    version: 23.1.0
-    releaseName: traefik
-    valuesFile: values-production.yaml
+    valuesFiles:
+      - ../../base/values.yaml
+      - values-production.yaml
