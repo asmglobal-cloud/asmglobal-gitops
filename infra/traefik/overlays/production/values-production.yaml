@@ -1,0 +1,28 @@
+# ============================
+# PRODUCTION TRAEFIK OVERRIDES
+# ============================
+
+# ACME Let's Encrypt Certificate Resolver using Hostinger DNS
+certificatesResolvers:
+  hostinger:
+    acme:
+      email: "admin@asmglobal.cloud"
+      storage: /data/acme.json
+      dnsChallenge:
+        provider: hostinger
+        delayBeforeCheck: 0
+
+# Ensure Traefik loads the Hostinger API token secret
+env:
+  - name: HST_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: hostinger-dns-api
+        key: HST_API_TOKEN
+
+# Enable persistent storage for ACME certs
+persistence:
+  enabled: true
+  size: 1Gi
+  accessMode: ReadWriteOnce
+  path: /data
