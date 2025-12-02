@@ -3,6 +3,10 @@ kind: Kustomization
 
 namespace: traefik
 
+resources:
+  - middleware-dashboard-auth.yaml
+  - dashboard-ingressroute.yaml
+
 helmCharts:
   - name: traefik
     repo: https://traefik.github.io/charts
