@@ -30,3 +30,27 @@ ingressRoute:
 service:
   type: LoadBalancer
   annotations: {}
+# ============================
+# ENTRYPOINT MIDDLEWARE
+# ============================
+globalArguments:
+  - "--api.dashboard=true"
+  - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+  - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+  - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
+
+# Enable access logs
+accessLogs:
+  enabled: true
+
+# Enable Traefik logs
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+
+# Security for dashboard: only allow internal routing (we will expose via IngressRoute)
+additionalArguments:
+  - "--api.insecure=false"
+  - "--serversTransport.insecureSkipVerify=true"
