@@ -5,5 +5,4 @@ metadata:
   namespace: traefik
 spec:
   basicAuth:
-    users:
-      - "admin:$apr1$hWWAT/9h$rSUbyFl1QORLmmxFOuHm30"
+    secret: dashboard-auth-secret
