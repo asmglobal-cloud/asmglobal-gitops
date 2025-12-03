@@ -1,0 +1,24 @@
+serviceAccount:
+  create: false
+
+additionalArguments:
+  - "--api.insecure=false"
+  - "--api.dashboard=true"
+
+ports:
+  web:
+    redirectTo: websecure
+
+ingressRoute:
+  dashboard:
+    enabled: true
+
+providers:
+  kubernetesCRD:
+    enabled: true
+  kubernetesIngress:
+    enabled: true
+
+logs:
+  access:
+    enabled: true

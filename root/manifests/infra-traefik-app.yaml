@@ -6,16 +6,17 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
-    targetRevision: main
-    path: infra/traefik/overlays/production
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-      - enable-helm=true
+  repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
+  targetRevision: main
+  path: infra/traefik/base
+  helm:
+    releaseName: traefik
+    chart: traefik
+    repoURL: https://traefik.github.io/charts
+    version: 23.1.0
+    values: |
+      serviceAccount:
+        create: true
+      additionalArguments:
+        - "--api.dashboard=true"
+
