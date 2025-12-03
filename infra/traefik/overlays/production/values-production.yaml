@@ -26,3 +26,10 @@ persistence:
   size: 1Gi
   accessMode: ReadWriteOnce
   path: /data
+
+# Disable Helm-created IngressClasses to fix Kustomize merge conflict
+ingressClass:
+  enabled: false
+
+ingressClassResource:
+  enabled: false
