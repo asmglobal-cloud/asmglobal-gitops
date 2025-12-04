@@ -25,9 +25,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y yamllint
 
-      - name: Lint all YAML files
+      - name: Lint all YAML files (using .yamllint.yaml)
         run: |
-          yamllint -f parsable -d "{extends: default, rules: {line-length: disable}}" .
+          yamllint -f parsable .
 
       # -------------------------
       # 2. INSTALL KUSTOMIZE
@@ -90,3 +90,4 @@ jobs:
               --auth-token $ARGOCD_AUTH_TOKEN \
               --local . \
               --exit-code
+          done
