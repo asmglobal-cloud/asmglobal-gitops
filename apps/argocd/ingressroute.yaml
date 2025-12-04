@@ -14,4 +14,3 @@ spec:
           port: 443
   tls:
     certResolver: cloudflare
-
