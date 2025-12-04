@@ -16,6 +16,7 @@ spec:
     namespace: argocd
 
   ignoreDifferences:
+    # Ignore ArgoCD's own dynamic metadata
     - group: argoproj.io
       kind: Application
       jsonPointers:
@@ -26,10 +27,32 @@ spec:
         - /metadata/resourceVersion
         - /metadata/uid
 
+    # Ignore Helm or cluster mutations inside child apps
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /metadata/annotations
+        - /status
+        - /spec/replicas
+        - /spec/template/spec/containers/0/image
+
+    # Ignore cluster-assigned fields in Services
+    - group: ""
+      kind: Service
+      jsonPointers:
+        - /spec/clusterIP
+        - /status
+        - /metadata/annotations
+
+    # Ignore secret metadata (not data!)
+    - group: ""
+      kind: Secret
+      jsonPointers:
+        - /metadata/annotations
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
