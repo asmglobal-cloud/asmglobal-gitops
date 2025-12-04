@@ -7,10 +7,10 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`argocd.asmglobal.cloud`)
-    kind: Rule
-    services:
-    - name: argocd-server
-      port: 443
+    - match: Host(`argocd.asmglobal.cloud`)
+      kind: Rule
+      services:
+        - name: argocd-server
+          port: 443
   tls:
     passthrough: true
