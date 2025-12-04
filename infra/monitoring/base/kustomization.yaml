@@ -16,4 +16,4 @@ helmCharts:
     releaseName: loki
     valuesInline:
       grafana:
-        enabled: false   # disable Grafana duplicate (prom-stack provides Grafana)
+        enabled: false   # disable Grafana duplicate (prom-stack already provides Grafana)
