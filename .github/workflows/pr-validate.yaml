@@ -1,0 +1,91 @@
+name: "GitOps PR Validation"
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validate:
+    name: "Validate GitOps Manifests"
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # -------------------------
+      # 1. YAML SYNTAX VALIDATION
+      # -------------------------
+      - name: Install yamllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yamllint
+
+      - name: Lint all YAML files
+  run: |
+    yamllint -f parsable -d "{extends: default, rules: {line-length: disable}}" .
+
+
+      # -------------------------
+      # 2. INSTALL KUSTOMIZE
+      # -------------------------
+      - name: Install kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+          sudo mv kustomize /usr/local/bin/
+
+      - name: Validate Kustomizations (kustomize build)
+        run: |
+          for k in $(find . -name kustomization.yaml | sed 's/kustomization.yaml//'); do
+            echo "Validating Kustomization in $k"
+            kustomize build "$k" > /dev/null
+          done
+
+      # -------------------------
+      # 3. INSTALL HELM
+      # -------------------------
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      # -------------------------
+      # 4. HELM LINT
+      # -------------------------
+      - name: Lint Helm charts
+        run: |
+          shopt -s nullglob
+          for chart in $(find . -name "Chart.yaml" | sed 's/Chart.yaml//'); do
+            echo "Helm lint: $chart"
+            helm lint "$chart"
+          done
+
+      # -------------------------
+      # 5. ARGOCD DRY-RUN VALIDATION
+      # -------------------------
+      - name: Install ArgoCD CLI
+        run: |
+          curl -sSL -o argocd \
+            https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          chmod +x argocd
+          sudo mv argocd /usr/local/bin/
+
+      - name: ArgoCD dry-run validation for all apps
+        env:
+          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+          ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+        run: |
+          if [[ -z "$ARGOCD_SERVER" ]] || [[ -z "$ARGOCD_AUTH_TOKEN" ]]; then
+            echo "Skipping ArgoCD dry-run: no credentials provided."
+            exit 0
+          fi
+
+          for app in $(argocd app list -o name --server $ARGOCD_SERVER --auth-token $ARGOCD_AUTH_TOKEN); do
+            echo "--- Validating $app ---"
+            argocd app diff "$app" \
+              --server $ARGOCD_SERVER \
+              --auth-token $ARGOCD_AUTH_TOKEN \
+              --local . \
+              --exit-code
+          done
