@@ -7,7 +7,6 @@ on:
   push:
     branches: ["main"]
 
-# Prevents aborted runs by ensuring only one workflow per branch
 concurrency:
   group: gitops-validation-${{ github.ref }}
   cancel-in-progress: true
