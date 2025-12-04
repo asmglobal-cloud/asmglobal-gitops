@@ -7,6 +7,10 @@ on:
   push:
     branches: ["main"]
 
+concurrency:
+  group: gitops-validation-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     name: "Validate GitOps Manifests"
@@ -38,11 +42,11 @@ jobs:
           sudo mv kustomize /usr/local/bin/
 
       - name: Validate Kustomizations (kustomize build)
-  run: |
-    for k in $(find . -name kustomization.yaml | sed 's/kustomization.yaml//'); do
-      echo "Validating Kustomization in $k"
-      kustomize build --enable-helm "$k" > /dev/null
-    done
+        run: |
+          for k in $(find . -name kustomization.yaml | sed 's/kustomization.yaml//'); do
+            echo "Validating Kustomization in $k"
+            kustomize build --enable-helm "$k" > /dev/null
+          done
 
       # -------------------------
       # 3. INSTALL HELM
