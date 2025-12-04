@@ -1,4 +1,4 @@
-apiVersion: traefik.io/v1alpha1
+apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: argocd-server
@@ -7,10 +7,10 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`argocd.asmglobal.cloud`)
-      kind: Rule
-      services:
-        - name: argocd-server
-          port: 443
+  - match: Host(`argocd.asmglobal.cloud`)
+    kind: Rule
+    services:
+    - name: argocd-server
+      port: 443
   tls:
-    passthrough: true
+    certResolver: cloudflare
