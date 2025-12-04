@@ -18,3 +18,4 @@ Instructions:
 1. Add Kubernetes manifests in the `apps/` and `infra/` folders.
 2. Push this repo to GitHub and note the Git URL.
 3. Update ArgoCD root application to point at the Git URL (we will do this later).
+# Trigger CI
