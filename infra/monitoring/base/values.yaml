@@ -1,0 +1,17 @@
+grafana:
+  adminPassword: "admin123"
+  service:
+    type: ClusterIP
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+
+alertmanager:
+  enabled: false
+
+loki:
+  enabled: true
+
+promtail:
+  enabled: true
