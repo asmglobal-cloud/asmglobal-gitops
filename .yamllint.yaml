@@ -1,0 +1,11 @@
+extends: default
+
+rules:
+  line-length: disable
+  truthy: disable
+
+ignore: |
+  infra/argocd/base/*
+  infra/monitoring/base/crds/*
+  **/argocd-install.yaml
+  **/crds/*
