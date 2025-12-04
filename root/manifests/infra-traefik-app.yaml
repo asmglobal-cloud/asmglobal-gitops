@@ -5,13 +5,77 @@ metadata:
   namespace: argocd
 spec:
   project: default
+
   source:
     repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
     targetRevision: main
     path: infra/traefik/overlays/production
+
   destination:
     server: https://kubernetes.default.svc
     namespace: traefik
+
+  ignoreDifferences:
+    # Ignore ArgoCD application metadata & status drift
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /metadata/creationTimestamp
+        - /metadata/generation
+        - /metadata/resourceVersion
+        - /metadata/uid
+
+    # Ignore Traefik CRDs — controller mutates these often
+    - group: traefik.io
+      kind: IngressRoute
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+
+    - group: traefik.io
+      kind: Middleware
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+
+    - group: traefik.io
+      kind: TraefikService
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+
+    # Ignore Helm/cluster-controlled fields in Deployments
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /metadata/annotations
+        - /spec/replicas
+        - /spec/template/metadata/annotations
+        - /spec/template/spec/containers/0/image
+        - /status
+
+    # Ignore cluster-assigned fields in Services
+    - group: ""
+      kind: Service
+      jsonPointers:
+        - /metadata/annotations
+        - /spec/clusterIP
+        - /status
+
+    # Ignore service accounts — Helm manages them
+    - group: ""
+      kind: ServiceAccount
+      jsonPointers:
+        - /metadata/annotations
+
+    # Ignore Secrets metadata only — not data
+    - group: ""
+      kind: Secret
+      jsonPointers:
+        - /metadata/annotations
+
   syncPolicy:
     automated:
       prune: true
