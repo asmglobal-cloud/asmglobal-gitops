@@ -5,16 +5,67 @@ metadata:
   namespace: argocd
 spec:
   project: default
+
   source:
     repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
     targetRevision: main
     path: infra/argocd
+
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
+
+  ignoreDifferences:
+    # ArgoCD configmap changes dynamically at runtime
+    - group: ""
+      kind: ConfigMap
+      name: argocd-cm
+      jsonPointers:
+        - /data
+        - /metadata/annotations
+
+    - group: ""
+      kind: ConfigMap
+      name: argocd-cmd-params-cm
+      jsonPointers:
+        - /data
+
+    # Repo-server adds certificates dynamically
+    - group: apps
+      kind: Deployment
+      name: argocd-repo-server
+      jsonPointers:
+        - /spec/template/spec/volumes
+        - /spec/template/spec/initContainers
+
+    # Redis password auto-rotates
+    - group: apps
+      kind: Deployment
+      name: argocd-redis
+      jsonPointers:
+        - /spec/template/spec/containers/0/env
+
+    # Notifications controller changes its config at runtime
+    - group: ""
+      kind: ConfigMap
+      name: argocd-notifications-cm
+      jsonPointers:
+        - /data
+
+    # Secrets always drift
+    - group: ""
+      kind: Secret
+      name: argocd-secret
+      jsonPointers:
+        - /data
+        - /metadata/annotations
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
+      - PruneLast=true
