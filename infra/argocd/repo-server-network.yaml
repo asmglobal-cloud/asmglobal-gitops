@@ -4,7 +4,6 @@ metadata:
   name: argocd-repo-server
   namespace: argocd
 spec:
-  # Ensure selector matches the template labels in the base manifest
   selector:
     matchLabels:
       app.kubernetes.io/name: argocd-repo-server
@@ -12,12 +11,11 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: argocd-repo-server
-  template:
     spec:
       containers:
-      - name: argocd-repo-server
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            add:
-              - NET_ADMIN
+        - name: argocd-repo-server
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_ADMIN
