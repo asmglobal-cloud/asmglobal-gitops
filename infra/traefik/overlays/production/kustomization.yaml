@@ -7,5 +7,5 @@ resources:
   - ../../base
   - middleware-dashboard-auth.yaml
   - dashboard-ingressroute.yaml
-  - dashboard-auth-secret.yaml
   - hostinger-secret.yaml
+  - dashboard-auth-secret.yaml
