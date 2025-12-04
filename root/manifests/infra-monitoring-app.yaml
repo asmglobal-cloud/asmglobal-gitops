@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: infra-monitoring
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
+    targetRevision: main
+    path: infra/monitoring/overlays/production
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - enable-helm=true
