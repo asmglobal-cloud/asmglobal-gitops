@@ -6,6 +6,14 @@ namespace: monitoring
 helmCharts:
   - name: kube-prometheus-stack
     repo: https://prometheus-community.github.io/helm-charts
-    version: 58.0.0
-    releaseName: monitoring
+    version: 61.2.0
+    releaseName: prometheus
     valuesFile: values.yaml
+
+  - name: loki-stack
+    repo: https://grafana.github.io/helm-charts
+    version: 2.10.2
+    releaseName: loki
+    valuesInline:
+      grafana:
+        enabled: false
