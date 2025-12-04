@@ -41,6 +41,7 @@ globalArguments:
   - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
   - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
   - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
+
 additionalArguments:
   - "--api.insecure=false"
   - "--serversTransport.insecureSkipVerify=true"
@@ -54,20 +55,18 @@ logs:
 # Persistence for ACME (so certs survive restarts/upgrades)
 persistence:
   enabled: false
-  
 
-# Certificates resolver using Hostinger DNS challenge (uses provider 'hostinger' from the chart)
+# Certificates resolver using Hostinger DNS challenge
 certificatesResolvers:
   hostinger:
     acme:
       email: "admin@asmglobal.cloud"
-      storage: /data/acme.json
+      storage: /data/acme.json"
       dnsChallenge:
         provider: hostinger
         delayBeforeCheck: 0
 
-# Reference Hostinger API token via Kubernetes Secret (DO NOT put real token here)
-# The chart may expect env or extraEnv depending on chart version; using env block works for standard charts.
+# Reference Hostinger API token via Kubernetes Secret
 env:
   - name: HST_API_TOKEN
     valueFrom:
