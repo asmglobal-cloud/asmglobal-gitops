@@ -16,4 +16,4 @@ helmCharts:
     releaseName: loki
     valuesInline:
       grafana:
-        enabled: false   # disable duplicate Grafana (prometheus stack provides Grafana)
+        enabled: false

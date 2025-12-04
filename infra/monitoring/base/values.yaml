@@ -1,4 +1,6 @@
 grafana:
-  adminPassword: "AsmGlobal@2025"
-  service:
-    type: ClusterIP
+  adminPassword: "admin123"
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
