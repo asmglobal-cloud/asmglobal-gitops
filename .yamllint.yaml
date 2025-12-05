@@ -10,7 +10,6 @@ rules:
     max-end: 0
 
 ignore: |
-  # Broad ignore rules (your branch)
   apps/**
   infra/**
   root/**
@@ -18,15 +17,15 @@ ignore: |
   **/crds/**
   **/templates/**
 
-  # Additional specific ignores (CI branch)
+  # Additional CI ignore patterns
   infra/argocd/base/*
   infra/monitoring/base/crds/*
   infra/monitoring/base/charts/*
   infra/monitoring/base/kube-prometheus-stack/*
   infra/monitoring/base/loki-stack/*
-
-  # Common Helm and template patterns
-  **/values.yaml
   **/*.tpl
   **/*.gotmpl
   **/argocd-install.yaml
+
+  # Common Helm patterns
+  **/values.yaml
