@@ -3,8 +3,6 @@ extends: default
 rules:
   line-length: disable
   truthy: disable
-  empty-lines:
-    max: 0
 
 ignore: |
   infra/argocd/base/*
