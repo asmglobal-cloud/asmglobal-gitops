@@ -3,17 +3,15 @@ extends: default
 rules:
   line-length: disable
   truthy: disable
+  empty-lines:
+    max: 0
 
 ignore: |
   infra/argocd/base/*
   infra/monitoring/base/crds/*
   infra/monitoring/base/charts/*
   infra/monitoring/base/kube-prometheus-stack/*
-  infra/monitoring/base/loki-stack/*
   **/charts/*
   **/crds/*
   **/templates/*
-  **/*.tpl
-  **/*.gotmpl
-  **/argocd-install.yaml
-
+  **/values.yaml
