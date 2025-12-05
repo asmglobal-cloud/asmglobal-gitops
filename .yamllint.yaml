@@ -9,7 +9,11 @@ ignore: |
   infra/monitoring/base/crds/*
   infra/monitoring/base/charts/*
   infra/monitoring/base/kube-prometheus-stack/*
+  infra/monitoring/base/loki-stack/*
   **/charts/*
   **/crds/*
   **/templates/*
-  **/values.yaml
+  **/*.tpl
+  **/*.gotmpl
+  **/argocd-install.yaml
+
