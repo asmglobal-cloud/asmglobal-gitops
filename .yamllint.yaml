@@ -10,10 +10,20 @@ rules:
     max-end: 0
 
 ignore: |
+  # Broad ignore rules (your branch)
   apps/**
   infra/**
   root/**
   **/charts/**
   **/crds/**
   **/templates/**
+
+  # Additional specific ignores (CI branch)
+  infra/argocd/base/*
+  infra/monitoring/base/crds/*
+  infra/monitoring/base/charts/*
+  infra/monitoring/base/kube-prometheus-stack/*
+
+  # Common Helm patterns
   **/values.yaml
+
