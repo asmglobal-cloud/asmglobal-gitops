@@ -7,5 +7,9 @@ rules:
 ignore: |
   infra/argocd/base/*
   infra/monitoring/base/crds/*
-  **/argocd-install.yaml
+  infra/monitoring/base/charts/*
+  infra/monitoring/base/kube-prometheus-stack/*
+  **/charts/*
   **/crds/*
+  **/templates/*
+  **/values.yaml
