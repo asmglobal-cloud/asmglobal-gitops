@@ -23,7 +23,10 @@ ignore: |
   infra/monitoring/base/crds/*
   infra/monitoring/base/charts/*
   infra/monitoring/base/kube-prometheus-stack/*
+  infra/monitoring/base/loki-stack/*
 
-  # Common Helm patterns
+  # Common Helm and template patterns
   **/values.yaml
-
+  **/*.tpl
+  **/*.gotmpl
+  **/argocd-install.yaml
