@@ -10,6 +10,7 @@ rules:
     max-end: 0
 
 ignore: |
+  # Broad ignore rules
   apps/**
   infra/**
   root/**
@@ -27,5 +28,5 @@ ignore: |
   **/*.gotmpl
   **/argocd-install.yaml
 
-  # Common Helm patterns
+  # Helm values files
   **/values.yaml
