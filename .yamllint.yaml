@@ -1,15 +1,19 @@
+---
 extends: default
 
 rules:
   line-length: disable
   truthy: disable
+  empty-lines:
+    max: 2
+    max-start: 0
+    max-end: 0
 
 ignore: |
-  infra/argocd/base/*
-  infra/monitoring/base/crds/*
-  infra/monitoring/base/charts/*
-  infra/monitoring/base/kube-prometheus-stack/*
-  **/charts/*
-  **/crds/*
-  **/templates/*
+  apps/**
+  infra/**
+  root/**
+  **/charts/**
+  **/crds/**
+  **/templates/**
   **/values.yaml
