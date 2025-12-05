@@ -1,19 +1,34 @@
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: monitoring
+
+resources:
+  - crds/crd-alertmanagerconfigs.yaml
+  - crds/crd-alertmanagers.yaml
+  - crds/crd-podmonitors.yaml
+  - crds/crd-probes.yaml
+  - crds/crd-prometheusagents.yaml
+  - crds/crd-prometheuses.yaml
+  - crds/crd-prometheusrules.yaml
+  - crds/crd-scrapeconfigs.yaml
+  - crds/crd-servicemonitors.yaml
+  - crds/crd-thanosrulers.yaml
 
 helmCharts:
   - name: kube-prometheus-stack
     repo: https://prometheus-community.github.io/helm-charts
     version: 61.2.0
     releaseName: prometheus
+    includeCRDs: false
     valuesFile: values.yaml
 
   - name: loki-stack
     repo: https://grafana.github.io/helm-charts
     version: 2.10.2
     releaseName: loki
+    includeCRDs: true
     valuesInline:
       grafana:
         enabled: false

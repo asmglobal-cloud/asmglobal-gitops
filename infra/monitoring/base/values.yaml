@@ -1,6 +1,13 @@
 grafana:
   adminPassword: "admin123"
+  ingress:
+    enabled: false
+
+prometheusOperator:
+  admissionWebhooks:
+    enabled: false
 
 prometheus:
   prometheusSpec:
     retention: 7d
+    serviceMonitorSelectorNilUsesHelmValues: false
