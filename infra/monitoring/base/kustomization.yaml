@@ -15,6 +15,7 @@ resources:
   - crds/crd-scrapeconfigs.yaml
   - crds/crd-servicemonitors.yaml
   - crds/crd-thanosrulers.yaml
+  - cert-manager-clusterissuer.yaml
 
 helmCharts:
   - name: kube-prometheus-stack
