@@ -3,17 +3,22 @@ kind: Kustomization
 
 namespace: monitoring
 
+resources:
+  - crds/
+
 helmCharts:
   - name: kube-prometheus-stack
     repo: https://prometheus-community.github.io/helm-charts
     version: 61.2.0
     releaseName: prometheus
+    includeCRDs: false
     valuesFile: values.yaml
 
   - name: loki-stack
     repo: https://grafana.github.io/helm-charts
     version: 2.10.2
     releaseName: loki
+    includeCRDs: true
     valuesInline:
       grafana:
         enabled: false
