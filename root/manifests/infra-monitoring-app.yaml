@@ -3,8 +3,31 @@ kind: Application
 metadata:
   name: infra-monitoring
   namespace: argocd
+
 spec:
   project: default
+
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      name: prometheusagents.monitoring.coreos.com
+      jsonPointers:
+        - /metadata/annotations
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      name: alertmanagers.monitoring.coreos.com
+      jsonPointers:
+        - /metadata/annotations
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      name: prometheuses.monitoring.coreos.com
+      jsonPointers:
+        - /metadata/annotations
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      name: thanosrulers.monitoring.coreos.com
+      jsonPointers:
+        - /metadata/annotations
 
   source:
     repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
@@ -21,4 +44,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - enable-helm=true
+      - EnableHelm=true
