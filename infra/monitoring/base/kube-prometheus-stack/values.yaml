@@ -3406,7 +3406,7 @@ prometheus:
 
     ## Number of seconds to wait for target to respond before erroring
     ##
-    scrapeTimeout: ""
+    scrapeTimeout: 10s
 
     ## Interval between consecutive evaluations.
     ##
