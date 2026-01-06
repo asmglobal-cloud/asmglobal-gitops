@@ -1,20 +1,6 @@
 grafana:
   adminPassword: "admin123"
-  ingress:
-    enabled: false
-
-prometheusOperator:
-  admissionWebhooks:
-    enabled: true
-    patch:
-      enabled: true
-    certManager:
-      enabled: true
-      issuerRef:
-        name: prometheus-selfsigned-issuer
-        kind: ClusterIssuer
 
 prometheus:
   prometheusSpec:
     retention: 7d
-    serviceMonitorSelectorNilUsesHelmValues: false
