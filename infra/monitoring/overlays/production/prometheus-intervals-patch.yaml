@@ -1,0 +1,8 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-kube-prometheus-prometheus
+  namespace: monitoring
+spec:
+  scrapeInterval: 30s
+  evaluationInterval: 30s

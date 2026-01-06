@@ -10,6 +10,12 @@ spec:
     repoURL: "https://github.com/asmglobal-cloud/asmglobal-gitops.git"
     targetRevision: main
     path: infra/monitoring/overlays/production
+    helm:
+      valuesObject:
+        prometheus:
+          prometheusSpec:
+            scrapeInterval: 30s
+            evaluationInterval: 30s
 
   destination:
     server: https://kubernetes.default.svc
