@@ -1,4 +1,5 @@
-# Traefik Production Values
+# Traefik Sovereign Edge Configuration
+# RGI Infrastructure OS — Bare Metal Mode
 
 experimental:
   kubernetesCRD: true
@@ -11,10 +12,12 @@ ports:
     port: 80
     expose: true
     exposedPort: 80
+
   websecure:
     port: 443
     expose: true
     exposedPort: 443
+
   traefik:
     port: 8080
     expose: true
@@ -24,14 +27,19 @@ ingressRoute:
   dashboard:
     enabled: false
 
-certificatesResolvers:
-  hostinger:
-    acme:
-      email: "admin@asmglobal.cloud"
-      storage: /data/acme.json
-      dnsChallenge:
-        provider: hostinger
-        delayBeforeCheck: 0
+# IMPORTANT:
+# No ACME here.
+# cert-manager owns TLS in RGI architecture.
+
+additionalArguments:
+  - "--entrypoints.web.address=:80"
+  - "--entrypoints.websecure.address=:443"
+  - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+  - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+  - "--providers.kubernetesingress"
+  - "--providers.kubernetescrd"
+  - "--log.level=INFO"
+  - "--accesslog=true"
 
 env:
   - name: HST_API_TOKEN
