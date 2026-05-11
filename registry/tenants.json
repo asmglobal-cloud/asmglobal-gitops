@@ -1,0 +1,22 @@
+[
+  {
+    "os": "education",
+    "tenant": "kingdombridge-academy",
+    "environment": "dev",
+    "namespace": "education-kingdombridge-academy-dev",
+    "host": "kingdombridge-academy.education.asmglobal.cloud",
+    "image": "knnrsolomon/education-os:release",
+    "status": "ACTIVE",
+    "created_at": "2026-05-11 00:46:05"
+  },
+  {
+    "os": "education",
+    "tenant": "covenant-academy",
+    "environment": "dev",
+    "namespace": "education-covenant-academy-dev",
+    "host": "covenant-academy.education.asmglobal.cloud",
+    "image": "knnrsolomon/education-os:release",
+    "status": "ACTIVE",
+    "created_at": "2026-05-11 00:50:03"
+  }
+]

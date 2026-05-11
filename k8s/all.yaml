@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asm-gitops-os
+  namespace: asmglobal-system
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: asm-gitops-os
+
+  template:
+    metadata:
+      labels:
+        app: asm-gitops-os
+      annotations:
+        asmglobal.cloud/redeploy: "gitops-os-v1"
+
+    spec:
+      containers:
+        - name: asm-gitops-os
+          image: knnrsolomon/asm-gitops-os:v1.0.0
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: asm-gitops-os
+  namespace: asmglobal-system
+
+spec:
+  selector:
+    app: asm-gitops-os
+
+  ports:
+    - port: 80
+      targetPort: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: asm-gitops-os
+  namespace: asmglobal-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+spec:
+  ingressClassName: traefik
+
+  tls:
+    - hosts:
+        - deploy.asmglobal.cloud
+      secretName: deploy-os-tls
+
+  rules:
+    - host: deploy.asmglobal.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: asm-gitops-os
+                port:
+                  number: 80

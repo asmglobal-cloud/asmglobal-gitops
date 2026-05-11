@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Namespace
+
+metadata:
+  name: {{TENANT_NAMESPACE}}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{TENANT_NAME}}
+  namespace: {{TENANT_NAMESPACE}}
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: {{TENANT_NAME}}
+
+  template:
+    metadata:
+      labels:
+        app: {{TENANT_NAME}}
+
+    spec:
+      containers:
+
+        - name: {{TENANT_NAME}}
+
+          image: {{TENANT_IMAGE}}
+
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80
+
+          env:
+            - name: TENANT_NAME
+              value: "{{TENANT_NAME}}"
+
+            - name: TENANT_OS
+              value: "{{TENANT_OS}}"
+
+            - name: TENANT_ENV
+              value: "{{TENANT_ENV}}"
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: {{TENANT_NAME}}
+  namespace: {{TENANT_NAMESPACE}}
+
+spec:
+  selector:
+    app: {{TENANT_NAME}}
+
+  ports:
+    - port: 80
+      targetPort: 80
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: {{TENANT_NAME}}
+  namespace: {{TENANT_NAMESPACE}}
+
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+spec:
+  ingressClassName: traefik
+
+  rules:
+
+    - host: {{TENANT_HOST}}
+
+      http:
+        paths:
+
+          - path: /
+            pathType: Prefix
+
+            backend:
+              service:
+                name: {{TENANT_NAME}}
+                port:
+                  number: 80
+
+  tls:
+    - hosts:
+        - {{TENANT_HOST}}
+
+      secretName: {{TENANT_TLS_SECRET}}
