@@ -81,18 +81,40 @@ jq --arg os "$OS" \
    --arg admin "$ADMIN_EMAIL" \
    --arg password "$BOOTSTRAP_PASSWORD" \
    --arg created "$CREATED_AT" \
-   '. += [{
-      os: $os,
-      tenant: $tenant,
-      environment: $env,
-      namespace: $namespace,
-      host: $host,
-      image: $image,
-      status: "ACTIVE",
-admin_email: $admin,
-bootstrap_password: $password,
-created_at: $created
-   }]' "$REGISTRY" > "$TMP"
+'
+map(
+  if .tenant == $tenant and .environment == $env
+  then
+    .os = $os |
+    .namespace = $namespace |
+    .host = $host |
+    .image = $image |
+    .status = "ACTIVE" |
+    .admin_email = $admin |
+    .bootstrap_password = $password |
+    .created_at = $created
+  else .
+  end
+)
++
+if map(select(.tenant == $tenant and .environment == $env)) | length == 0
+then
+  [{
+    os: $os,
+    tenant: $tenant,
+    environment: $env,
+    namespace: $namespace,
+    host: $host,
+    image: $image,
+    status: "ACTIVE",
+    admin_email: $admin,
+    bootstrap_password: $password,
+    created_at: $created
+  }]
+else
+  []
+end
+' "$REGISTRY" > "$TMP"
 
 mv "$TMP" "$REGISTRY"
 
