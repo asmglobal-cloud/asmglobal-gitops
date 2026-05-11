@@ -48,5 +48,17 @@
     "image": "knnrsolomon/education-os:release",
     "status": "SUSPENDED",
     "created_at": "2026-05-11 01:24:22"
+  },
+  {
+    "os": "education",
+    "tenant": "destiny-academy",
+    "environment": "dev",
+    "namespace": "education-destiny-academy-dev",
+    "host": "destiny-academy.education.asmglobal.cloud",
+    "image": "knnrsolomon/education-os:release",
+    "status": "ACTIVE",
+    "admin_email": "admin@destiny-academy.education.asmglobal.cloud",
+    "bootstrap_password": "OlmzHTTsvImyB25G",
+    "created_at": "2026-05-11 01:56:30"
   }
 ]

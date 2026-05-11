@@ -28,6 +28,9 @@ TENANT_IMAGE="knnrsolomon/${OS}-os:release"
 TENANT_HOST="${TENANT}.${OS}.asmglobal.cloud"
 
 TENANT_TLS_SECRET="${TENANT}-${OS}-tls"
+ADMIN_EMAIL="admin@${TENANT}.${OS}.asmglobal.cloud"
+
+BOOTSTRAP_PASSWORD=$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9' | head -c 16)
 
 TARGET_FILE="$TARGET_DIR/all.yaml"
 ARGO_DIR="$ROOT/argocd/$ENVIRONMENT"
@@ -75,6 +78,8 @@ jq --arg os "$OS" \
    --arg namespace "$TENANT_NAMESPACE" \
    --arg host "$TENANT_HOST" \
    --arg image "$TENANT_IMAGE" \
+   --arg admin "$ADMIN_EMAIL" \
+   --arg password "$BOOTSTRAP_PASSWORD" \
    --arg created "$CREATED_AT" \
    '. += [{
       os: $os,
@@ -84,7 +89,9 @@ jq --arg os "$OS" \
       host: $host,
       image: $image,
       status: "ACTIVE",
-      created_at: $created
+admin_email: $admin,
+bootstrap_password: $password,
+created_at: $created
    }]' "$REGISTRY" > "$TMP"
 
 mv "$TMP" "$REGISTRY"
@@ -124,6 +131,16 @@ echo ""
 
 echo "Tenant is now live at:"
 echo "https://$TENANT_HOST"
+
+echo ""
+
+echo "Bootstrap Admin:"
+echo "$ADMIN_EMAIL"
+
+echo ""
+
+echo "Bootstrap Password:"
+echo "$BOOTSTRAP_PASSWORD"
 
 echo ""
 
