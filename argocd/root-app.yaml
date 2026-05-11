@@ -14,7 +14,7 @@ spec:
 
     targetRevision: release
 
-    path: argocd/dev
+    path: argocd
 
   destination:
     server: https://kubernetes.default.svc
