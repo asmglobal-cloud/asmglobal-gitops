@@ -105,6 +105,18 @@ echo ""
 echo "GitOps state committed successfully."
 echo ""
 
+echo "Triggering ArgoCD reconciliation..."
+echo ""
+
+kubectl annotate application asmglobal-gitops-root \
+  -n argocd \
+  argocd.argoproj.io/refresh=hard --overwrite
+
+echo ""
+
+echo "ArgoCD reconciliation triggered."
+echo ""
+
 echo "======================================"
 echo "DEPLOYMENT COMPLETE"
 echo "======================================"
