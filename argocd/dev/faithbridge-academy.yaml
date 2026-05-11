@@ -10,7 +10,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/ASMGlobal/asm-gitops-os.git
+    repoURL: https://github.com/asmglobal-cloud/asmglobal-gitops.git
 
     targetRevision: release
 

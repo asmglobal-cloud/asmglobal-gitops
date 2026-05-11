@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: {{TENANT_NAME}}-{{TENANT_ENV}}
+  name: asmglobal-gitops-root
 
   namespace: argocd
 
@@ -14,17 +14,14 @@ spec:
 
     targetRevision: release
 
-    path: tenants/{{TENANT_ENV}}/{{TENANT_OS}}/{{TENANT_NAME}}
+    path: argocd/dev
 
   destination:
     server: https://kubernetes.default.svc
 
-    namespace: {{TENANT_NAMESPACE}}
+    namespace: argocd
 
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
-    syncOptions:
-      - CreateNamespace=true
