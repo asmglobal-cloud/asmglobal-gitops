@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: asmglobal-gitops-root
+  name: asmglobal-gitops-prod
 
   namespace: argocd
 
@@ -14,12 +14,12 @@ spec:
 
     targetRevision: release
 
-    path: argocd
+    path: argocd/prod
 
   destination:
     server: https://kubernetes.default.svc
 
-    namespace: path: argocd/dev
+    namespace: argocd
 
   syncPolicy:
     automated:
