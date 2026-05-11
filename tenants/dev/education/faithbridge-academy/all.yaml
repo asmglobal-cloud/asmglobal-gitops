@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Namespace
+
+metadata:
+  name: education-faithbridge-academy-dev
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: faithbridge-academy
+  namespace: education-faithbridge-academy-dev
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: faithbridge-academy
+
+  template:
+    metadata:
+      labels:
+        app: faithbridge-academy
+
+    spec:
+      containers:
+
+        - name: faithbridge-academy
+
+          image: knnrsolomon/education-os:release
+
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80
+
+          env:
+            - name: TENANT_NAME
+              value: "faithbridge-academy"
+
+            - name: TENANT_OS
+              value: "education"
+
+            - name: TENANT_ENV
+              value: "dev"
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: faithbridge-academy
+  namespace: education-faithbridge-academy-dev
+
+spec:
+  selector:
+    app: faithbridge-academy
+
+  ports:
+    - port: 80
+      targetPort: 80
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: faithbridge-academy
+  namespace: education-faithbridge-academy-dev
+
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+spec:
+  ingressClassName: traefik
+
+  rules:
+
+    - host: faithbridge-academy.education.asmglobal.cloud
+
+      http:
+        paths:
+
+          - path: /
+            pathType: Prefix
+
+            backend:
+              service:
+                name: faithbridge-academy
+                port:
+                  number: 80
+
+  tls:
+    - hosts:
+        - faithbridge-academy.education.asmglobal.cloud
+
+      secretName: faithbridge-academy-education-tls

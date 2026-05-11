@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: faithbridge-academy-dev
+
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/ASMGlobal/asm-gitops-os.git
+
+    targetRevision: release
+
+    path: tenants/dev/education/faithbridge-academy
+
+  destination:
+    server: https://kubernetes.default.svc
+
+    namespace: education-faithbridge-academy-dev
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true

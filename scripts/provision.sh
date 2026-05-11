@@ -15,6 +15,7 @@ fi
 ROOT="/root/asmglobal-platform-os/apps/asm-gitops-os"
 
 TEMPLATE="$ROOT/templates/base-tenant.yaml"
+ARGO_TEMPLATE="$ROOT/templates/base-argocd-app.yaml"
 
 TARGET_DIR="$ROOT/tenants/$ENVIRONMENT/$OS/$TENANT"
 
@@ -29,11 +30,15 @@ TENANT_HOST="${TENANT}.${OS}.asmglobal.cloud"
 TENANT_TLS_SECRET="${TENANT}-${OS}-tls"
 
 TARGET_FILE="$TARGET_DIR/all.yaml"
+ARGO_DIR="$ROOT/argocd/$ENVIRONMENT"
+
+ARGO_FILE="$ARGO_DIR/${TENANT}.yaml"
 REGISTRY="$ROOT/registry/tenants.json"
 
 CREATED_AT=$(date +"%Y-%m-%d %H:%M:%S")
 
 cp "$TEMPLATE" "$TARGET_FILE"
+cp "$ARGO_TEMPLATE" "$ARGO_FILE"
 
 sed -i "s|{{TENANT_NAMESPACE}}|$TENANT_NAMESPACE|g" "$TARGET_FILE"
 
@@ -48,6 +53,14 @@ sed -i "s|{{TENANT_ENV}}|$ENVIRONMENT|g" "$TARGET_FILE"
 sed -i "s|{{TENANT_HOST}}|$TENANT_HOST|g" "$TARGET_FILE"
 
 sed -i "s|{{TENANT_TLS_SECRET}}|$TENANT_TLS_SECRET|g" "$TARGET_FILE"
+
+sed -i "s|{{TENANT_NAMESPACE}}|$TENANT_NAMESPACE|g" "$ARGO_FILE"
+
+sed -i "s|{{TENANT_NAME}}|$TENANT|g" "$ARGO_FILE"
+
+sed -i "s|{{TENANT_OS}}|$OS|g" "$ARGO_FILE"
+
+sed -i "s|{{TENANT_ENV}}|$ENVIRONMENT|g" "$ARGO_FILE"
 
 echo ""
 
