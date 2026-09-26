@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: asmglobal-control-plane
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/asmglobal-cloud/asmglobal-gitops.git
+    targetRevision: release
+    path: core/asmglobal-control-plane
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: asmglobal-system
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

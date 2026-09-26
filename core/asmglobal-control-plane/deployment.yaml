@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: asmglobal-control-plane
+  namespace: asmglobal-system
+  labels:
+    app: asmglobal-control-plane
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: asmglobal-control-plane
+
+  template:
+    metadata:
+      labels:
+        app: asmglobal-control-plane
+
+    spec:
+      containers:
+        - name: control-plane
+          image: knnrsolomon/asm-control-plane:control-dev-20260926-175158
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80
+
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: asmglobal-control-plane-secret
+                  key: DB_HOST
+
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: asmglobal-control-plane-secret
+                  key: DB_DATABASE
+
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: asmglobal-control-plane-secret
+                  key: DB_USERNAME
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: asmglobal-control-plane-secret
+                  key: DB_PASSWORD

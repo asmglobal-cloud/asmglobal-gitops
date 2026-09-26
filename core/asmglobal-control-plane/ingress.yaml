@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: asmglobal-control-plane
+  namespace: asmglobal-system
+
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.priority: "1"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+
+spec:
+  ingressClassName: traefik
+
+  rules:
+    - host: control.asmglobal.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: asmglobal-control-plane
+                port:
+                  number: 80
+
+    - host: api.asmglobal.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: asmglobal-control-plane
+                port:
+                  number: 80
+
+  tls:
+    - hosts:
+        - control.asmglobal.cloud
+        - api.asmglobal.cloud
+      secretName: control-plane-tls
