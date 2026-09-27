@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: control-plane
-          image: knnrsolomon/asm-control-plane:control-dev-20260927-business-quota
+          image: knnrsolomon/asm-control-plane:control-dev-20260927-register
           imagePullPolicy: Always
 
           ports:
