@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: control-plane
-          image: knnrsolomon/asm-control-plane:control-prod-20260930-003340
+          image: knnrsolomon/asm-control-plane:control-prod-20261001-210809
           imagePullPolicy: Always
 
           ports:
