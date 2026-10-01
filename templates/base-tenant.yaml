@@ -47,6 +47,9 @@ spec:
             - name: TENANT_ENV
               value: "{{TENANT_ENV}}"
 
+            - name: ASM_CONTROL_PLANE_URL
+              value: "http://asmglobal-control-plane"
+
 ---
 
 apiVersion: v1
