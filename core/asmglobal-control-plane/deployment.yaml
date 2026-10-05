@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: control-plane
-          image: knnrsolomon/asm-control-plane:control-prod-20261004-federation-login
+          image: knnrsolomon/asm-control-plane:control-prod-20261005-business-federation
           imagePullPolicy: Always
 
           ports:
