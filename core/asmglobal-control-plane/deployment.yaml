@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: control-plane
-          image: knnrsolomon/asm-control-plane:control-prod-20261006-provisioning-quota-fix
+          image: knnrsolomon/asm-control-plane:control-prod-20261006-tmp-permission-fix
           imagePullPolicy: Always
 
           ports:
