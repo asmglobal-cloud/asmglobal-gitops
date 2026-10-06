@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: control-plane
-          image: knnrsolomon/asm-control-plane:control-prod-20261006-tmp-permission-fix
+          image: knnrsolomon/asm-control-plane:control-prod-20261006-business-institution
           imagePullPolicy: Always
 
           ports:
