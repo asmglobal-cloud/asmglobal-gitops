@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: asmglobal-gitops-root
+  name: asmglobal-gitops-dev
 
   namespace: argocd
 
