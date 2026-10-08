@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: https://github.com/asmglobal-cloud/asmglobal-gitops.git
 
-    targetRevision: release
+    targetRevision: development
 
     path: argocd
 
