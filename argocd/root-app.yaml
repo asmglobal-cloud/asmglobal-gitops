@@ -3,7 +3,6 @@ kind: Application
 
 metadata:
   name: asmglobal-gitops-dev
-
   namespace: argocd
 
 spec:
@@ -11,15 +10,12 @@ spec:
 
   source:
     repoURL: https://github.com/asmglobal-cloud/asmglobal-gitops.git
-
     targetRevision: development
-
-    path: argocd
+    path: argocd/dev
 
   destination:
     server: https://kubernetes.default.svc
-
-    namespace: path: argocd/dev
+    namespace: argocd
 
   syncPolicy:
     automated:
