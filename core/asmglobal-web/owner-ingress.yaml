@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: asmglobal-web-owner
+  namespace: web-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - owner.asmglobal.cloud
+      secretName: asmglobal-web-owner-tls
+  rules:
+    - host: owner.asmglobal.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: asmglobal-web
+                port:
+                  number: 80

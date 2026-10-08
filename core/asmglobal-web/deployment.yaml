@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asmglobal-web
+  namespace: web-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: asmglobal-web
+  template:
+    metadata:
+      labels:
+        app: asmglobal-web
+    spec:
+      containers:
+        - name: asmglobal-web
+          image: knnrsolomon/asmglobal-web:v1.0.0-launch
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
