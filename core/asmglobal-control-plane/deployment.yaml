@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: control-plane
-          image: knnrsolomon/asm-control-plane:control-prod-20261007-federation-email-resolution
+          image: knnrsolomon/asm-control-plane:control-prod-20261022-php-cve-fix
           imagePullPolicy: Always
 
           ports:
