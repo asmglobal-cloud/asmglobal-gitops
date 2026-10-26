@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: control-plane
-          image: knnrsolomon/asm-control-plane:control-prod-callback-fix-20261025
+          image: knnrsolomon/asm-control-plane:control-iam-shared-20261026-003220
           imagePullPolicy: Always
 
           ports:
@@ -52,3 +52,18 @@ spec:
                 secretKeyRef:
                   name: asmglobal-control-plane-secret
                   key: DB_PASSWORD
+            - name: ASM_IAM_CLIENT_BUSINESS_OS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: asmglobal-iam-client-credentials
+                  key: ASM_IAM_CLIENT_BUSINESS_OS_KEY
+            - name: ASM_IAM_CLIENT_EDUCATION_OS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: asmglobal-iam-client-credentials
+                  key: ASM_IAM_CLIENT_EDUCATION_OS_KEY
+            - name: ASM_IAM_CLIENT_IDENTITY_OS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: asmglobal-iam-client-credentials
+                  key: ASM_IAM_CLIENT_IDENTITY_OS_KEY
