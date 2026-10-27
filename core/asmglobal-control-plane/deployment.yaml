@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: control-plane
-          image: knnrsolomon/asm-control-plane:control-iam-shared-20261026-003220
+          image: knnrsolomon/asm-control-plane:auth-errors-069e15d
           imagePullPolicy: Always
 
           ports:
