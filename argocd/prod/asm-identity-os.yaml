@@ -9,7 +9,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/Rgi-Asm-Global/asmglobal-platform-os.git
+    repoURL: https://github.com/asmglobal-cloud/asmglobal-platform-os.git
     targetRevision: release
     path: apps/asm-identity-os/overlays/prod
 
