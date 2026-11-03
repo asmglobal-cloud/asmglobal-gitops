@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kojo-ai-stage
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/asmglobal-cloud/asmglobal-platform-os.git
+    targetRevision: release
+    path: apps/asm-ai/overlays/stage
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ai-stage
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
