@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kojo-ai-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/asmglobal-cloud/asmglobal-platform-os.git
+    targetRevision: release
+    path: apps/asm-ai/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ai-dev
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
