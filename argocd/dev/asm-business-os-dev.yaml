@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Rgi-Asm-Global/asmglobal-platform-os.git
+    repoURL: https://github.com/asmglobal-cloud/asmglobal-platform-os.git
     targetRevision: development
     path: apps/asm-business-os/overlays/dev
   destination:
