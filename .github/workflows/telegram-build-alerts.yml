@@ -1,0 +1,62 @@
+name: "Telegram GitOps build alerts"
+
+on:
+  workflow_run:
+    workflows: ["GitOps PR Validation"]
+    types: [completed]
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    name: "Send verified build status to Telegram"
+    if: >-
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion != 'cancelled') ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send status alert
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          EVENT_NAME: ${{ github.event_name }}
+          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          RUN_PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${TELEGRAM_BOT_TOKEN:-}" || -z "${TELEGRAM_CHAT_ID:-}" ]]; then
+            echo "::warning::Telegram alerts are not enabled. Add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID as repository Actions secrets."
+            exit 0
+          fi
+
+          if [[ "$EVENT_NAME" == "workflow_run" ]]; then
+            conclusion="${RUN_CONCLUSION:-unknown}"
+            pr_number="${RUN_PR_NUMBER:-}"
+            message="ASMGlobal GitOps: validation ${conclusion}."
+            if [[ "$pr_number" =~ ^[0-9]+$ ]]; then
+              message+=" PR #${pr_number}: https://github.com/${REPOSITORY}/pull/${pr_number}"
+            fi
+            if [[ -n "${RUN_URL:-}" ]]; then
+              message+=" Workflow: ${RUN_URL}"
+            fi
+          else
+            pr_number="${PR_NUMBER:-}"
+            [[ "$pr_number" =~ ^[0-9]+$ ]] || { echo "::error::Invalid PR number"; exit 1; }
+            message="ASMGlobal GitOps: PR #${pr_number} was merged. https://github.com/${REPOSITORY}/pull/${pr_number}"
+          fi
+
+          curl --fail --silent --show-error \
+            --request POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=${message}" \
+            --data "disable_web_page_preview=true"
