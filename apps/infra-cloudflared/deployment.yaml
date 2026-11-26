@@ -30,9 +30,13 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - tunnel
+            - --no-autoupdate
+            - --loglevel
+            - info
+            - --output
+            - json
             - --metrics
             - 0.0.0.0:2000
-            - --no-autoupdate
             - run
           env:
             - name: TUNNEL_TOKEN
@@ -61,30 +65,21 @@ spec:
               cpu: 300m
               memory: 256Mi
           livenessProbe:
-            exec:
-              command:
-                - cloudflared
-                - tunnel
-                - --metrics
-                - 127.0.0.1:2000
-                - --no-autoupdate
-                - ready
+            httpGet:
+              path: /ready
+              port: 2000
             initialDelaySeconds: 10
             periodSeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
           readinessProbe:
-            exec:
-              command:
-                - cloudflared
-                - tunnel
-                - --metrics
-                - 127.0.0.1:2000
-                - --no-autoupdate
-                - ready
+            httpGet:
+              path: /ready
+              port: 2000
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 5
+            failureThreshold: 3
       volumes:
         - name: tmp
           emptyDir:
