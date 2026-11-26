@@ -1,0 +1,56 @@
+name: "Automated Dev Account approval and merge"
+
+on:
+  workflow_run:
+    workflows: ["GitOps PR Validation"]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  approve-and-merge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.pull_requests[0].number != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify the successful run matches the current eligible PR
+        id: verify
+        env:
+          GH_TOKEN: ${{ secrets.DEV_ACCOUNT_PAT }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+          VALIDATED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            echo "::error::Repository secret DEV_ACCOUNT_PAT is not configured."
+            exit 1
+          fi
+
+          pr_json="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json author,baseRefName,headRefName,headRefOid,state)"
+          author="$(jq -r '.author.login' <<< "$pr_json")"
+          base="$(jq -r '.baseRefName' <<< "$pr_json")"
+          branch="$(jq -r '.headRefName' <<< "$pr_json")"
+          head_sha="$(jq -r '.headRefOid' <<< "$pr_json")"
+          state="$(jq -r '.state' <<< "$pr_json")"
+
+          [[ "$state" == "OPEN" ]] || { echo "PR is not open; stop."; exit 1; }
+          [[ "$author" == "knnrsolomon" ]] || { echo "PR author is not the approved automation owner; stop."; exit 1; }
+          [[ "$base" == "main" ]] || { echo "PR base is not main; stop."; exit 1; }
+          [[ "$branch" == feature/* || "$branch" == fix/* || "$branch" == automation/* ]] || { echo "Branch prefix is not eligible for automated merge; stop."; exit 1; }
+          [[ "$head_sha" == "$VALIDATED_SHA" ]] || { echo "PR changed after validation; wait for the latest validation run."; exit 1; }
+
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "Eligible PR #$PR_NUMBER at validated commit $head_sha"
+
+      - name: Approve with the separate Dev Account and squash-merge
+        if: steps.verify.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.DEV_ACCOUNT_PAT }}
+          PR_NUMBER: ${{ steps.verify.outputs.pr_number }}
+        run: |
+          set -euo pipefail
+          gh pr review "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --approve --body "Automated Dev Account approval: GitOps PR Validation passed for the exact current head commit."
+          gh pr merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --squash --delete-branch
