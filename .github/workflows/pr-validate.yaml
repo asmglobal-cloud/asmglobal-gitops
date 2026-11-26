@@ -36,10 +36,14 @@ jobs:
       # -------------------------
       # 2. INSTALL KUSTOMIZE
       # -------------------------
-      - name: Install kustomize
+      - name: Install kustomize (pinned release; avoid GitHub API rate limit)
+        env:
+          KUSTOMIZE_VERSION: v5.8.1
         run: |
-          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-          sudo mv kustomize /usr/local/bin/
+          curl -fsSL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" -o /tmp/kustomize.tar.gz
+          tar -xzf /tmp/kustomize.tar.gz -C /tmp
+          sudo install -m 0755 /tmp/kustomize /usr/local/bin/kustomize
+          kustomize version
 
       - name: Validate Kustomizations (kustomize build)
         run: |
