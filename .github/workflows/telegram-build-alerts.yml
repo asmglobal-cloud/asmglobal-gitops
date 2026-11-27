@@ -29,7 +29,6 @@ jobs:
           RUN_URL: ${{ github.event.workflow_run.html_url }}
           RUN_PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          PR_MERGED: ${{ github.event.pull_request.merged }}
           REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
@@ -55,8 +54,16 @@ jobs:
             message="ASMGlobal GitOps: PR #${pr_number} was merged. https://github.com/${REPOSITORY}/pull/${pr_number}"
           fi
 
-          curl --fail --silent --show-error \
+          response="$(curl --fail --silent --show-error \
             --request POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
             --data-urlencode "text=${message}" \
-            --data "disable_web_page_preview=true"
+            --data "disable_web_page_preview=true")"
+
+          if ! jq -e '.ok == true' >/dev/null <<< "$response"; then
+            description="$(jq -r '.description // "Telegram API returned ok=false"' <<< "$response")"
+            echo "::error::Telegram rejected the notification: ${description}"
+            exit 1
+          fi
+
+          echo "Telegram notification delivered."
